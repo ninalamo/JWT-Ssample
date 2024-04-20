@@ -16,6 +16,5 @@ public record RegisterModel
 
     [Required]
     [MaxLength(16)]
-    [DataType(DataType.Password)]
     public string? ConfirmPassword { get; init; }
 }
