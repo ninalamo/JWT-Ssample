@@ -1,5 +1,5 @@
 # auth-server
-
+```json
 {
   "ConnectionStrings": {
     "DefaultConnection": "Server=localhost;Database=authdb;User Id=sa;Password=someThingComplicated1234;TrustServerCertificate=True;MultiSubnetFailover=True;",
@@ -31,3 +31,4 @@
   "DefaultPassword": ""
 }
 
+```
