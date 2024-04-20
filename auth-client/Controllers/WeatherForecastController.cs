@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace auth_client.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
@@ -19,8 +18,9 @@ namespace auth_client.Controllers
             _logger = logger;
         }
 
-        [Authorize]
-        [HttpGet(Name = "GetWeatherForecast")]
+      
+        [HttpGet]
+        [Route("api/weather")]
         public IEnumerable<WeatherForecast> Get()
         {
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
