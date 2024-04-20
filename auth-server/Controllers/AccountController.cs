@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using auth_server.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -8,21 +9,44 @@ using System.Text;
 
 namespace auth_server.Controllers
 {
-    public class AccountController : Controller
+    [ApiController]
+    public class AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager) : Controller
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
 
 
-        public async Task<IActionResult> GetToken(string userName, string password)
+        [HttpGet]
+        [Route("register")]
+        public async Task<IActionResult> Register(string username, string password, string confirmapassword)
+        {
+            if(password != confirmapassword)
+            {
+                throw new 
+            }
+        }
+
+
+        [Route("login")]
+        [ProducesResponseType(typeof(string), 200)]
+        [HttpGet]
+        public async Task<IActionResult> Login([FromBody] LoginModel loginModel)
         {
             // Assuming you have retrieved the authenticated user information
-            var user = await _userManager.Users.SingleOrDefaultAsync(c => c.UserName == userName);
+            var user = await userManager.Users.SingleOrDefaultAsync(c => c.UserName == loginModel.Username);
             if(user == null)
             {
                 return NotFound();
             }
 
+            if (! await signInManager.CanSignInAsync(user))
+            {
+                return Forbid();
+            }
+
+            var loginResult = await signInManager.CheckPasswordSignInAsync(user, loginModel.Password!, false);
+            if(!loginResult.Succeeded)
+            {
+                return Unauthorized();
+            }
 
             // Define security key (store securely!)
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("your_secret_key"));
