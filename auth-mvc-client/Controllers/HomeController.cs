@@ -3,6 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Net.Http.Headers;
 using System.Net.Http;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
+using System.Text;
+using System.Text.Json;
 
 namespace auth_mvc_client.Controllers
 {
@@ -11,22 +16,36 @@ namespace auth_mvc_client.Controllers
 
         public async Task<IActionResult> Index()
         {
-            //var token = GetTokenFromStorage(); // Replace with logic to retrieve token from storage (e.g., cookie)
-            //_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            //var loginResponse = await httpClient.PostAsJsonAsync("https://localhost:7076/login", new LoginViewModel
+            //{
+            //    Username = "username",
+            //    Password = "Password1234!",
+            //});  
+
+            //var token = await loginResponse.Content.ReadAsStringAsync();
+
+            var token = HttpContext.Session.GetString("jwtToken");
+
+            if (string.IsNullOrEmpty(token))
+            {
+                return RedirectToAction("Login", "Login");
+            }
+
+            // Replace with logic to retrieve token from storage (e.g., cookie)
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             var response = await httpClient.GetAsync("https://localhost:7101/api/weather");
 
+            var reason = await response.Content.ReadAsStringAsync();
+
             if (response.IsSuccessStatusCode)
             {
-                var content = await response.Content.ReadAsStringAsync();
+                var content = await response.Content.ReadFromJsonAsync<WeatherForecastModel[]>();
                 // Handle successful response with content
-            }
-            else
-            {
-                // Handle error response
+                return View(content);
             }
 
-            return View();
+            return View(Array.Empty<WeatherForecastModel>());
         }
 
         public IActionResult Privacy()
