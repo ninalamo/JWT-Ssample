@@ -1,4 +1,11 @@
 # auth-server
+```mermaid
+flowchart TD
+    A -.-> | Login | C[Identity Server]   
+    C -.-> | Returns Token | A
+    A[WebApp] -->|Performs HTTP Client Request with Token| B(Protected resource API)
+```
+
 ```json
 {
   "ConnectionStrings": {

@@ -2,12 +2,8 @@ using auth_mvc_client.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Net.Http.Headers;
-using System.Net.Http;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
-using System.Security.Claims;
 using System.Text;
-using System.Text.Json;
 
 namespace auth_mvc_client.Controllers
 {
@@ -16,13 +12,6 @@ namespace auth_mvc_client.Controllers
 
         public async Task<IActionResult> Index()
         {
-            //var loginResponse = await httpClient.PostAsJsonAsync("https://localhost:7076/login", new LoginViewModel
-            //{
-            //    Username = "username",
-            //    Password = "Password1234!",
-            //});  
-
-            //var token = await loginResponse.Content.ReadAsStringAsync();
 
             var token = HttpContext.Session.GetString("jwtToken");
 
@@ -35,8 +24,6 @@ namespace auth_mvc_client.Controllers
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             var response = await httpClient.GetAsync("https://localhost:7101/api/weather");
-
-            var reason = await response.Content.ReadAsStringAsync();
 
             if (response.IsSuccessStatusCode)
             {
