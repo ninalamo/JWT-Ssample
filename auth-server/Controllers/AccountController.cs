@@ -12,7 +12,7 @@ using System.Text;
 namespace auth_server.Controllers
 {
     [ApiController]
-    public class AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager) : Controller
+    public class AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IConfiguration configuration) : Controller
     {
 
 
@@ -50,6 +50,9 @@ namespace auth_server.Controllers
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginModel loginModel)
         {
+#if DEBUG
+            loginModel = new LoginModel { Password = "Password1234!", Username = "username" };
+#endif
             // Assuming you have retrieved the authenticated user information
             var user = await userManager.Users.SingleOrDefaultAsync(c => c.UserName == loginModel.Username);
             if(user == null)
@@ -69,7 +72,7 @@ namespace auth_server.Controllers
             }
 
             // Define security key (store securely!)
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("d3341f0b-58c3-4c70-bd6f-5ed6e4cf5015"));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             // Define claims (user information)
@@ -86,7 +89,9 @@ namespace auth_server.Controllers
             {
                 Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.UtcNow.AddMinutes(30), // Set expiration time
-                SigningCredentials = credentials
+                SigningCredentials = credentials,
+                Audience = configuration["JWT:ValidAudience"],
+                Issuer = configuration["JWT:ValidIssuer"],                
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
