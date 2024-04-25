@@ -1,9 +1,17 @@
 # auth-server
 ```mermaid
-flowchart TD
-    A -.-> | Login | C[Identity Server]   
-    C -.-> | Returns Token | A
-    A[WebApp] -->|Performs HTTP Client Request with Token| B(Protected resource API)
+flowchart LR
+    Website -.-> |1. Login - Fetch Token| IdentityServer
+    IdentityServer -.-> |2. Store Token to Session / LocalStorage | Website
+    Website --> |3. Send HTTP Request with JWT| Protected
+    
+    subgraph Protected
+    WeatherForeCastApi
+    end
+    subgraph IdentityServer
+
+    end
+
 ```
 
 ```json
