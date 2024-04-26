@@ -1,38 +1,22 @@
-
+using auth_client.service;
+using auth_client.service.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace auth_client.Controllers
+namespace auth_client_mvc.Controllers
 {
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public class WeatherForecastController : ControllerBase
+    public class WeatherForecastController(IWeatherService weatherService) : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
-
-        private readonly ILogger<WeatherForecastController> _logger;
-
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
-        {
-            _logger = logger;
-        }
-
-      
+       
         [HttpGet]
         [Route("api/weather")]
-        public IEnumerable<WeatherForecast> Get()
+        [ProducesResponseType(typeof(IEnumerable<WeatherForecastModel>),StatusCodes.Status200OK)]
+        public IEnumerable<WeatherForecastModel> Get()
         {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+            return weatherService.GetAll();
         }
     }
 }

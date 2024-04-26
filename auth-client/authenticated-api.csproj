@@ -15,4 +15,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\auth-client.infrastructure\auth-client.infrastructure\auth-client.infrastructure.csproj" />
+    <ProjectReference Include="..\auth-client.service\auth-client.service\auth-client.service.csproj" />
+  </ItemGroup>
+
 </Project>
