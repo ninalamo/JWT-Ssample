@@ -14,4 +14,3 @@ public record LoginViewModel
     [DataType(DataType.Password)]
     public string? Password { get; init; } = "Password1234!";
 }
-public record WeatherForecastModel(DateOnly Date, int TemperatureC, int TemperatureF, string? Summary);

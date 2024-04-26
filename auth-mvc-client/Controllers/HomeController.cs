@@ -2,8 +2,6 @@ using auth_mvc_client.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Net.Http.Headers;
-using Microsoft.AspNetCore.Authentication;
-using System.Text;
 
 namespace auth_mvc_client.Controllers
 {
