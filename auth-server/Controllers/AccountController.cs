@@ -1,6 +1,5 @@
-﻿using auth_server.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Identity;
+﻿using auth_server.service;
+using auth_server.service.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -12,13 +11,14 @@ using System.Text;
 namespace auth_server.Controllers
 {
     [ApiController]
-    public class AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IConfiguration configuration) : Controller
+    public class AccountController(IAuthService authService, IConfiguration configuration) : Controller
     {
 
 
         [HttpPost]
         [Route("register")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.Created)]
+        [ProducesErrorResponseType(typeof(BadRequestObjectResult))]
         [ProducesDefaultResponseType]
         public async Task<IActionResult> Register([FromBody] RegisterModel registerModel)
         {
@@ -27,20 +27,9 @@ namespace auth_server.Controllers
                 ModelState.AddModelError("Password", "Password does not match");
             }
 
-            var user = await userManager.Users.SingleOrDefaultAsync(c => c.UserName == registerModel.Username);
-            if (user != null)
-            {
-                ModelState.AddModelError("Username", "Username is already used.");
-            }
-            user = new IdentityUser(registerModel.Username!);
-            var createResult = await userManager.CreateAsync(user, registerModel.Password!);
+            var id = await authService.RegisterAsync(registerModel);
 
-            if(createResult.Succeeded)
-            {
-                return Created("register",user!.Id);
-            }
-
-            return BadRequest(ModelState);
+            return Ok(id);
         }
 
 
@@ -53,51 +42,10 @@ namespace auth_server.Controllers
 #if DEBUG
             loginModel = new LoginModel { Password = "Password1234!", Username = "username" };
 #endif
-            // Assuming you have retrieved the authenticated user information
-            var user = await userManager.Users.SingleOrDefaultAsync(c => c.UserName == loginModel.Username);
-            if(user == null)
-            {
-                return NotFound();
-            }
+            var token = await authService.LoginAsync(loginModel);
 
-            if (! await signInManager.CanSignInAsync(user))
-            {
-                return Forbid();
-            }
 
-            var loginResult = await signInManager.CheckPasswordSignInAsync(user, loginModel.Password!, false);
-            if(!loginResult.Succeeded)
-            {
-                return Unauthorized();
-            }
-
-            // Define security key (store securely!)
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-            // Define claims (user information)
-            var claims = new List<Claim>()
-            {
-              new Claim(ClaimTypes.NameIdentifier, user.Id),
-              new Claim(ClaimTypes.Name,user.UserName),
-              // Add other relevant claims (e.g., username, role)
-            };
-
-            // Generate the JWT token
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddMinutes(30), // Set expiration time
-                SigningCredentials = credentials,
-                Audience = configuration["JWT:ValidAudience"],
-                Issuer = configuration["JWT:ValidIssuer"],                
-            };
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var encodedToken = tokenHandler.WriteToken(token);
-
-            return Ok(encodedToken);
+            return Ok(token);
 
         }
     }
