@@ -21,7 +21,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped(typeof(IAuthService), typeof(AuthService));
+builder.Services.AddScoped(typeof(IAuthService), typeof(OtherAuthService));
 
 var app = builder.Build();
 

@@ -37,9 +37,6 @@ namespace auth_server.Controllers
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginModel loginModel)
         {
-#if DEBUG
-            loginModel = new LoginModel { Password = "Password1234!", Username = "username" };
-#endif
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
