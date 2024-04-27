@@ -1,4 +1,4 @@
-# auth-server
+# Identity Server (auth-server)
 ### Project Dependency and Workflow
 
 ```mermaid
