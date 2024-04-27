@@ -21,7 +21,16 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped(typeof(IAuthService), typeof(OtherAuthService));
+var useIdentity = builder.Configuration["UseIdentity"];
+if(bool.Parse(useIdentity!))
+{
+    builder.Services.AddScoped(typeof(IAuthService), typeof(AuthService));
+
+}else
+{
+    builder.Services.AddScoped(typeof(IAuthService), typeof(OtherAuthService));
+
+}
 
 var app = builder.Build();
 
