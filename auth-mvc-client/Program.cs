@@ -6,7 +6,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddHttpClient();
-builder.Services.AddScoped(typeof(IHttpService), typeof(FakeWeatherHttpService));
+var useFakeWeather = builder.Configuration["UseFakeWeather"];
+
+if (bool.Parse(useFakeWeather) == true)
+{
+    builder.Services.AddScoped(typeof(IHttpService), typeof(FakeHttpService));
+}else
+{
+    builder.Services.AddScoped(typeof(IHttpService), typeof(HttpService));
+}
 
 builder.Services.AddSession(options =>
 {
