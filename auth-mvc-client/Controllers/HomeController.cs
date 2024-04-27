@@ -1,3 +1,4 @@
+using auth_mvc_client.Extenstions;
 using auth_mvc_client.httpservice;
 using auth_mvc_client.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -18,12 +19,12 @@ namespace auth_mvc_client.Controllers
             {
                 return RedirectToAction("Login", "Login");
             }
-            var weatherForecast = (await httpService.GetWeatherForecasts(token))
-                .Select(x => new WeatherForecastModel(
-                x.Date, x.TemperatureC,x.TemperatureF, x.Summary));
-            return View(weatherForecast);
+            var weatherForecast = await httpService.GetWeatherForecasts(token);
+
+            return View(weatherForecast.ToDto());
         }
 
+   
         public IActionResult Privacy()
         {
             return View();
