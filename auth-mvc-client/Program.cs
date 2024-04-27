@@ -1,9 +1,12 @@
+using auth_mvc_client.httpservice;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddHttpClient();
+builder.Services.AddScoped(typeof(IHttpService), typeof(FakeWeatherHttpService));
 
 builder.Services.AddSession(options =>
 {
