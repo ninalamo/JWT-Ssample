@@ -25,6 +25,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "auth-client.service", "auth
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "auth-mvc-client.httpservice", "auth-mvc-client.httpservice\auth-mvc-client.httpservice\auth-mvc-client.httpservice.csproj", "{38FACB59-ABB4-4DDF-B59C-78D634FEFA21}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "auth-mvc-client.authservice", "auth-mvc-client.authservice\auth-mvc-client.authservice\auth-mvc-client.authservice.csproj", "{9C1B8BD3-8E2D-42CC-9259-44EE30C5F779}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{38FACB59-ABB4-4DDF-B59C-78D634FEFA21}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{38FACB59-ABB4-4DDF-B59C-78D634FEFA21}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{38FACB59-ABB4-4DDF-B59C-78D634FEFA21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C1B8BD3-8E2D-42CC-9259-44EE30C5F779}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C1B8BD3-8E2D-42CC-9259-44EE30C5F779}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C1B8BD3-8E2D-42CC-9259-44EE30C5F779}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C1B8BD3-8E2D-42CC-9259-44EE30C5F779}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -76,6 +82,7 @@ Global
 		{39C1280A-6EED-4C54-BD37-515F975F8878} = {B0BA3D45-B4B2-44C3-8E5B-D5D77144257A}
 		{A5C5A4F7-D00D-4766-9427-87821CDBE1E6} = {B0BA3D45-B4B2-44C3-8E5B-D5D77144257A}
 		{38FACB59-ABB4-4DDF-B59C-78D634FEFA21} = {397FA78C-12CC-4F3F-8AF4-DCA7201BE2BA}
+		{9C1B8BD3-8E2D-42CC-9259-44EE30C5F779} = {397FA78C-12CC-4F3F-8AF4-DCA7201BE2BA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3BA4B2F3-29CB-4782-8026-60AB690AE3B6}

@@ -3,7 +3,7 @@ using System.Net.Http.Json;
 
 namespace auth_mvc_client.httpservice
 {
-    public class WeatherHttpService(HttpClient httpClient) : IHttpService
+    public class HttpService(HttpClient httpClient) : IHttpService
     {
         public async Task<IEnumerable<WeatherForecastApiModel>> GetWeatherForecasts(string jwtToken)
         {
@@ -19,6 +19,11 @@ namespace auth_mvc_client.httpservice
                 return content ?? [];
             }
             return Array.Empty<WeatherForecastApiModel>();
+        }
+
+        public Task<string> LoginAsync(string username, string password)
+        {
+            throw new NotImplementedException();
         }
     }
 }
