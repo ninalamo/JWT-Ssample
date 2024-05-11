@@ -5,14 +5,9 @@ using System.Text.Json;
 
 namespace auth_mvc_client.Controllers
 {
-    public class LoginController : Controller
+    public class LoginController(HttpClient httpClient) : Controller
     {
-        private readonly HttpClient _httpClient; // Inject HttpClient for API calls
-
-        public LoginController(HttpClient httpClient)
-        {
-            _httpClient = httpClient;
-        }
+        private readonly HttpClient _httpClient = httpClient; // Inject HttpClient for API calls
 
         [HttpGet]
         public IActionResult Login()
