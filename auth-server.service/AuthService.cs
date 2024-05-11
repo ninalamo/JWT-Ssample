@@ -45,6 +45,7 @@ namespace auth_server.service
             {
               new Claim(ClaimTypes.NameIdentifier, user.Id),
               new Claim(ClaimTypes.Name,user.UserName),
+              new Claim(ClaimTypes.Role,"admin"),
               // Add other relevant claims (e.g., username, role)
             };
 
@@ -57,6 +58,8 @@ namespace auth_server.service
                 SigningCredentials = credentials,
                 Audience = configuration["JWT:ValidAudience"],
                 Issuer = configuration["JWT:ValidIssuer"],
+                
+                
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);

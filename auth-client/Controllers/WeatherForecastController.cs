@@ -10,12 +10,14 @@ namespace auth_client_mvc.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class WeatherForecastController(IWeatherService weatherService) : ControllerBase
     {
-       
+
+        [Authorize(Policy = "AdminOnly")]
         [HttpGet]
         [Route("api/weather")]
         [ProducesResponseType(typeof(IEnumerable<WeatherForecastModel>),StatusCodes.Status200OK)]
         public IEnumerable<WeatherForecastModel> Get()
         {
+            var temp = User;
             return weatherService.GetAll();
         }
     }

@@ -12,7 +12,11 @@ builder.Services.AddDbContext<AuthContext>(options =>
     options.UseSqlServer(connectionString);
 });
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+{
+  
+    options.Password.RequireUppercase = true;
+})
      .AddEntityFrameworkStores<AuthContext>()
      .AddDefaultTokenProviders();
 
@@ -22,14 +26,17 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var useIdentity = builder.Configuration["UseIdentity"];
-if(bool.Parse(useIdentity!))
+switch (useIdentity)
 {
-    builder.Services.AddScoped(typeof(IAuthService), typeof(AuthService));
-
-}else
-{
-    builder.Services.AddScoped(typeof(IAuthService), typeof(OtherAuthService));
-
+    case "identity":
+        builder.Services.AddScoped(typeof(IAuthService), typeof(AuthService));
+        break;
+    case "ms-acceess":
+        // builder.Services.AddScoped(typeof(IAuthService), typeof(MsAccessAuthService));
+        break;
+    case "other":
+        builder.Services.AddScoped(typeof(IAuthService), typeof(OtherAuthService));
+        break;
 }
 
 var app = builder.Build();

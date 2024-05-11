@@ -16,9 +16,10 @@ namespace auth_mvc_client.httpservice
             {
                 var content = await response.Content.ReadFromJsonAsync<WeatherForecastApiModel[]>();
                 // Handle successful response with content
-                return content ?? [];
+                return content ?? [];;
             }
-            return Array.Empty<WeatherForecastApiModel>();
+
+            return [];
         }
 
         public Task<string> LoginAsync(string username, string password)
